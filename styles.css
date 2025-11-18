@@ -700,6 +700,18 @@ section {
     justify-content: center;
 }
 
+.contact-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.contact-link:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
 .social-links {
     display: flex;
     gap: 1rem;
