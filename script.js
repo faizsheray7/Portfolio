@@ -130,11 +130,11 @@ if (contactForm) {
         emailjs.send('service_oo54qyh', 'template_2lvke0c', templateParams, '0f1RgA7X_g1D8MYRu')
             .then((response) => {
                 console.log('SUCCESS!', response.status, response.text);
-                alert(`Thank you, ${name}! Your message has been sent successfully. I'll get back to you soon.`);
+                showModal(`Thank you, ${name}! Your message has been sent successfully. I'll get back to you soon.`, 'success');
                 contactForm.reset();
             }, (error) => {
                 console.log('FAILED...', error);
-                alert('Sorry, there was an error sending your message. Please try again later or contact me directly at fsheray32@gmail.com');
+                showModal('Sorry, there was an error sending your message. Please try again later or contact me directly at fsheray32@gmail.com', 'error');
             })
             .finally(() => {
                 // Reset button state
@@ -373,11 +373,58 @@ socialLinks.forEach((link, index) => {
     link.addEventListener('mouseenter', () => {
         link.style.transform = 'translateY(-5px) rotate(5deg)';
     });
-    
+
     link.addEventListener('mouseleave', () => {
         link.style.transform = 'translateY(0) rotate(0)';
     });
 });
+
+// Custom Modal Functions
+function showModal(message, type = 'success') {
+    const modal = document.getElementById('customModal');
+    const modalMessage = document.getElementById('modalMessage');
+    const modalBody = modal.querySelector('.modal-body');
+    const modalIcon = modal.querySelector('.modal-icon');
+
+    // Set message
+    modalMessage.textContent = message;
+
+    // Reset classes
+    modalBody.classList.remove('success', 'error');
+
+    // Set type-specific styling
+    if (type === 'success') {
+        modalBody.classList.add('success');
+        modalIcon.className = 'modal-icon fas fa-check-circle';
+    } else if (type === 'error') {
+        modalBody.classList.add('error');
+        modalIcon.className = 'modal-icon fas fa-exclamation-triangle';
+    }
+
+    // Show modal
+    modal.style.display = 'block';
+
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+        closeModal();
+    }, 5000);
+
+    // Close modal when clicking the close button
+    const closeBtn = modal.querySelector('.close-btn');
+    closeBtn.onclick = closeModal;
+
+    // Close modal when clicking outside
+    window.onclick = (event) => {
+        if (event.target === modal) {
+            closeModal();
+        }
+    };
+}
+
+function closeModal() {
+    const modal = document.getElementById('customModal');
+    modal.style.display = 'none';
+}
 
 console.log('Portfolio loaded successfully! ');
 
