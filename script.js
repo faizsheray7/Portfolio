@@ -99,24 +99,48 @@ const observer = new IntersectionObserver((entries) => {
 const sections = document.querySelectorAll('section');
 sections.forEach(section => observer.observe(section));
 
-// Form submission
+// Form submission with EmailJS
 const contactForm = document.querySelector('.contact-form');
 if (contactForm) {
     contactForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        
+
         // Get form data
-        const formData = new FormData(contactForm);
         const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
         const subject = document.getElementById('subject').value;
         const message = document.getElementById('message').value;
-        
-        // Simulate form submission
-        alert(`Thank you, ${name}! Your message has been sent. I'll get back to you soon.`);
-        
-        // Reset form
-        contactForm.reset();
+
+        // Show loading state
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Sending...';
+        submitBtn.disabled = true;
+
+        // EmailJS parameters
+        const templateParams = {
+            from_name: name,
+            from_email: email,
+            subject: subject,
+            message: message,
+            to_email: 'fsheray32@gmail.com'
+        };
+
+        // Send email using EmailJS
+        emailjs.send('service_oo54qyh', 'template_2lvke0c', templateParams, '0f1RgA7X_g1D8MYRu')
+            .then((response) => {
+                console.log('SUCCESS!', response.status, response.text);
+                alert(`Thank you, ${name}! Your message has been sent successfully. I'll get back to you soon.`);
+                contactForm.reset();
+            }, (error) => {
+                console.log('FAILED...', error);
+                alert('Sorry, there was an error sending your message. Please try again later or contact me directly at fsheray32@gmail.com');
+            })
+            .finally(() => {
+                // Reset button state
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            });
     });
 }
 
@@ -355,5 +379,5 @@ socialLinks.forEach((link, index) => {
     });
 });
 
-console.log('Portfolio loaded successfully! 🚀');
+console.log('Portfolio loaded successfully! ');
 
